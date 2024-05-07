@@ -1,0 +1,6 @@
+export const Admin_Route = '/admin'
+export const Registration_Route = '/registration'
+export const MainMenu_Route = '/'
+export const login_route = '/login'
+export const Attractions_route = '/attractions'
+export const AddAttraction_route = '/addAttraction' 
