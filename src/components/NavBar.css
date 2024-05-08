@@ -1,0 +1,36 @@
+.nav-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    color: #f2f2f2;
+    padding: 1rem;
+  }
+  
+  .nav-brand-link {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #f2f2f2;
+  }
+  
+  .nav-menu {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-menu-item {
+    margin-left: 1rem;
+  }
+  
+  .nav-menu-link {
+    color: #f2f2f2;
+    text-decoration: none;
+  }
+  
+  .nav-menu-link:hover {
+    color: #ccc;
+  }
+  
