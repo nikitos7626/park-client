@@ -1,11 +1,9 @@
 import React from "react";
-
+import AttractionCard from "../components/AttractionCards";
 
 const Attractions = () =>{
     return (
-        <div>
-           Attractions
-        </div>
+      <AttractionCard/>
     )
 }
 export default Attractions;

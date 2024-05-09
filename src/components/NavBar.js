@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../index";
 import "./NavBar.css";
 import { NavLink } from "react-router-dom";
-import { Admin_Route, AddAttraction_route, MainMenu_Route, login_route, Registration_Route, Attractions_route } from "../utils/consts";
+import { Admin_Route, AddAttraction_route, MainMenu_Route, login_route, Attractions_route ,Profile_route} from "../utils/consts";
 
 const NavBar = () => {
   const { user } = useContext(Context);
@@ -23,11 +23,6 @@ const NavBar = () => {
             <li className="nav-menu-item">
               <NavLink to={login_route} className="nav-menu-link">
                 Логин
-              </NavLink>
-            </li>
-            <li className="nav-menu-item">
-              <NavLink to={Registration_Route} className="nav-menu-link">
-                Регистрация
               </NavLink>
             </li>
           </>
