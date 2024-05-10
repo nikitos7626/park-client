@@ -1,0 +1,33 @@
+.nav-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: url('../Images/MainMenuImage.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  .nav-brand-link {
+    font-size: 20px;
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  .nav-menu {
+    display: flex;
+    list-style-type: none;
+  }
+  
+  .nav-menu-item {
+    margin-right: 10px;
+  }
+  
+  .nav-menu-link {
+    font-size: 16px;
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  .nav-menu-link:hover {
+    color: #cccccc;
+  }
