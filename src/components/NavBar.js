@@ -5,12 +5,14 @@ import { NavLink } from "react-router-dom";
 import { Admin_Route, AddAttraction_route, MainMenu_Route, login_route, Attractions_route ,Profile_route} from "../utils/consts";
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
+import ticketStore from "../store/ticketStore";
 
 const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    ticketStore.logout()
     user.setIsAuth(false);
     user.setUser({});
   };

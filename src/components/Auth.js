@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { registration, login } from '../http/userAPI';
-import { useLocation,useNavigate } from 'react-router-dom';
-import {  Attractions_route, login_route } from '../utils/consts';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Attractions_route, login_route } from '../utils/consts';
 import { Context } from '../index';
 
 const Authform = () => {
   const location = useLocation();
   const { user } = useContext(Context);
   const navigate = useNavigate();
-  const isLogin = location.pathname === login_route;
+  // const isLogin = location.pathname === login_route; // Удаляем эту строку
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState('login');
@@ -17,7 +17,7 @@ const Authform = () => {
   const click = async () => {
     let data;
     try {
-      if (mode === 'login' || isLogin) {
+      if (mode === 'login') {
         data = await login(email, password);
         console.log("login")
       } else if (mode === 'register') {
