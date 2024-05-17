@@ -3,9 +3,17 @@ import { Context } from "../index";
 import "./NavBar.css";
 import { NavLink } from "react-router-dom";
 import { Admin_Route, AddAttraction_route, MainMenu_Route, login_route, Attractions_route ,Profile_route} from "../utils/consts";
+import { observer } from 'mobx-react-lite';
+import { useNavigate } from 'react-router-dom';
 
-const NavBar = () => {
+const NavBar = observer(() => {
   const { user } = useContext(Context);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    user.setIsAuth(false);
+    user.setUser({});
+  };
 
   return (
     <nav className="nav-bar-container">
@@ -44,11 +52,16 @@ const NavBar = () => {
                 Профиль
               </NavLink>
             </li>
+            <li className="nav-menu-item">
+              <NavLink to={login_route} className="nav-menu-link" onClick={handleLogout}>
+                Logout
+              </NavLink>
+            </li>
           </>
         )}
       </ul>
     </nav>
   );
-};
+});
 
 export default NavBar;
