@@ -7,7 +7,7 @@ import { Context } from ".";
 import { check } from "./http/userAPI";
 
 const App = observer(() => {
-  const { user } = useContext(Context);
+  const { user,attractions } = useContext(Context);
 
   useEffect(() => {
     check().then(data => {

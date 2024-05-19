@@ -8,13 +8,18 @@ import { useNavigate } from 'react-router-dom';
 import ticketStore from "../store/ticketStore";
 
 const NavBar = observer(() => {
-  const { user } = useContext(Context);
+  const { user,attractions } = useContext(Context);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     ticketStore.logout()
     user.setIsAuth(false);
     user.setUser({});
+  };
+  
+  const handleAttractionsClick = () => {
+    attractions.fetchAttractions(); 
+    navigate(Attractions_route); // Перейдите на страницу аттракционов
   };
 
   return (
@@ -24,7 +29,7 @@ const NavBar = observer(() => {
       </NavLink>
       <ul className="nav-menu">
         <li className="nav-menu-item">
-          <NavLink to={Attractions_route} className="nav-menu-link">
+          <NavLink to={Attractions_route} className="nav-menu-link"  onClick={handleAttractionsClick}>
             Аттракционы
           </NavLink>
         </li>

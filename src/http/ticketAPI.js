@@ -1,4 +1,4 @@
-import { $authHost, $host } from "./index";
+import { $authHost} from "./index";
 
 const ticketAPI = {
   addbalance: async (balance) => {

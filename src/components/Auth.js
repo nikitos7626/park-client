@@ -9,7 +9,6 @@ const Authform = () => {
   const location = useLocation();
   const { user } = useContext(Context);
   const navigate = useNavigate();
-  // const isLogin = location.pathname === login_route; // Удаляем эту строку
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState('login');
