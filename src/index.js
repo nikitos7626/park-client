@@ -2,7 +2,7 @@ import React, { createContext,useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import UserStore from './store/UserStore';
-import AttractionStore from './store/AttractionStore';
+import TicketStore from './store/ticketStore';
 import config from './config';
 
 export const Context = createContext(null);
@@ -13,7 +13,7 @@ root.render(
   <Context.Provider
     value={{
       user: new UserStore(),
-      attractions: new AttractionStore(),
+      ticket: new TicketStore(),
     }}
   >
     <App />

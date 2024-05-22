@@ -8,17 +8,17 @@ import { useNavigate } from 'react-router-dom';
 import ticketStore from "../store/ticketStore";
 
 const NavBar = observer(() => {
-  const { user,attractions } = useContext(Context);
+  const { user,ticket } = useContext(Context);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    ticketStore.logout()
+    ticket.logout()
     user.setIsAuth(false);
     user.setUser({});
   };
   
   const handleAttractionsClick = () => {
-    attractions.fetchAttractions(); 
+    ticket.fetchAttractions(); 
     navigate(Attractions_route); // Перейдите на страницу аттракционов
   };
 

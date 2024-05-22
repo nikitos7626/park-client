@@ -1,4 +1,4 @@
-import { $authHost} from "./index";
+import { $authHost, $host} from "./index";
 
 const ticketAPI = {
   addbalance: async (balance) => {
@@ -7,12 +7,17 @@ const ticketAPI = {
   },
 
   buyTicket: async (name_attraction) => {
-    const { data } = await $authHost.post('api/ticket/buy', { name_attraction }); 
+    const { data } = await $authHost.post('api/ticket/buy', {name_attraction:name_attraction }); 
     return data;
   },
 
   getBalance: async () => {
     const { data } = await $authHost.get('api/user/getBalance');
+    return data;
+  },
+
+  getAttractions: async () => {
+    const { data } = await $host.get('api/attraction/getAllAttractions');
     return data;
   }
   

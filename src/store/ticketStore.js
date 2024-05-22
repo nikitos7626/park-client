@@ -1,10 +1,11 @@
 import { makeAutoObservable } from "mobx";
-import ticketAPI from "../http/ticketAPI";
+import ticketAPI from "../http/ticketAPI"; 
 
-class TicketStore {
+export default class TicketStore {
   constructor() {
-    this._balance = 0; // Инициализируем баланс нулем
+    this._balance = 0;
     this._user = {};
+    this._attractions = []; // Добавьте массив для аттракционов
     makeAutoObservable(this);
   }
 
@@ -17,6 +18,10 @@ class TicketStore {
     return this._user;
   }
 
+  get attractions() {
+    return this._attractions;
+  }
+
   // Метод для обновления информации о пользователе
   setUser(user) {
     this._user = user;
@@ -26,22 +31,43 @@ class TicketStore {
   setBalance(newBalance) {
     this._balance = newBalance;
   }
+
+  // Метод для обновления списка аттракционов
+  setAttractions(attractions) {
+    this._attractions = attractions;
+  }
+
   async addBalance(amount) {
     try {
-      const response = await ticketAPI.addbalance(amount); // Вызываем API
-      console.log(response); // Проверяем ответ API
-      this.setBalance(response.balance); // Обновляем баланс в хранилище
+      const response = await ticketAPI.addbalance(amount);
+      this.setBalance(response.balance);
     } catch (error) {
       console.error('Ошибка при пополнении баланса:', error);
-      // Обработать ошибку (например, вывести сообщение пользователю)
     }
   }
+
+  async buyTicket(name_attraction) {
+    try {
+      await ticketAPI.buyTicket(name_attraction); 
+      // Получите обновленный баланс после покупки билета
+      const balanceResponse = await ticketAPI.getBalance(); 
+      this.setBalance(balanceResponse.balance); 
+    } catch (error) {
+      console.error('Ошибка при покупке билета:', error);
+    }
+  }
+
+  async fetchAttractions() {
+    try {
+      const data = await ticketAPI.getAttractions();
+      this.setAttractions(data);
+    } catch (error) {
+      console.error('Ошибка получения аттракционов:', error);
+    }
+  }
+
   logout() {
-    this._user = {}; // Очищаем данные пользователя
-    this._balance = 0; // Сбрасываем баланс
+    this._user = {};
+    this._balance = 0;
   }
 }
-
-const ticketStore = new TicketStore();
-
-export default ticketStore;

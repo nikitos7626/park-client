@@ -2,16 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from '../index';
 import { observer } from 'mobx-react-lite';
 import AttractionCard from '../components/AttractionCards';
-import { Row, Col } from 'antd'; // Импортируем Row и Col для компоновки
+import { Row, Col } from 'antd'; 
 
 const Attractions = observer(() => {
-  const { attractions } = useContext(Context);
+  const { ticket } = useContext(Context);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      await attractions.fetchAttractions();
+      await ticket.fetchAttractions();
       setIsLoading(false);
     };
     fetchData();
@@ -24,9 +24,9 @@ const Attractions = observer(() => {
         <p>Загрузка...</p>
       ) : (
         <div>
-          {attractions.Attractions && attractions.Attractions.length > 0 ? (
-            <Row gutter={[16, 16]}> {/* Используем Row для создания ряда */}
-              {attractions.Attractions.map((attraction) => (
+          {ticket.attractions && ticket.attractions.length > 0 ? ( // Используйте ticket.attractions
+            <Row gutter={[16, 16]}> 
+              {ticket.attractions.map((attraction) => (
                 <AttractionCard key={attraction.id} attraction={attraction} />
               ))}
             </Row>

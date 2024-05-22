@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import TicketStore from '../store/ticketStore';
+import { Context } from '../index';
 
 const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
-
-  const ticketStore = TicketStore;
-
+  const {ticket} = useContext(Context)
   useEffect(() => {
     // Получить баланс пользователя при монтировании компонента
-    console.log(ticketStore.balance); // Выводим баланс в консоль
-  }, [ticketStore.balance]); // Добавляем зависимость
+    console.log(ticket.balance); // Выводим баланс в консоль
+  }, [ticket.balance]); // Добавляем зависимость
 
   const handleAddBalance = async () => {
     try {
-      await ticketStore.addBalance(amount); // Вызываем метод addBalance
+      await ticket.addBalance(amount); // Вызываем метод addBalance
       setAmount(''); // Очищаем поле ввода
     } catch (error) {
       console.error(error);
@@ -25,7 +23,7 @@ const Profile = observer(() => {
   return (
     <div>
       {/* Отобразить баланс пользователя */}
-      <p>Ваш баланс: {ticketStore.balance}</p>
+      <p>Ваш баланс: {ticket.balance}</p>
 
       {/* Форма для пополнения баланса */}
       <div>
