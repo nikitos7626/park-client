@@ -7,7 +7,7 @@ const ticketAPI = {
   },
 
   buyTicket: async (name_attraction) => {
-    const { data } = await $authHost.post('api/ticket/buy', {name_attraction:name_attraction }); 
+    const { data } = await $authHost.post('api/ticket/buy', {name_attraction }); 
     return data;
   },
 
@@ -19,7 +19,12 @@ const ticketAPI = {
   getAttractions: async () => {
     const { data } = await $host.get('api/attraction/getAllAttractions');
     return data;
+  },
+  getTickets: async()=>{
+    const {data} = await $authHost.get('api/ticket/getTickets')
+    return data;
   }
+  
   
 };
 

@@ -24,7 +24,7 @@ const Attractions = observer(() => {
         <p>Загрузка...</p>
       ) : (
         <div>
-          {ticket.attractions && ticket.attractions.length > 0 ? ( // Используйте ticket.attractions
+          {ticket.attractions && ticket.attractions.length > 0 ? (
             <Row gutter={[16, 16]}> 
               {ticket.attractions.map((attraction) => (
                 <AttractionCard key={attraction.id} attraction={attraction} />

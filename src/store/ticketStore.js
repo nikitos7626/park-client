@@ -5,7 +5,8 @@ export default class TicketStore {
   constructor() {
     this._balance = 0;
     this._user = {};
-    this._attractions = []; // Добавьте массив для аттракционов
+    this._attractions = []; 
+    this._tickets = [];
     makeAutoObservable(this);
   }
 
@@ -16,6 +17,10 @@ export default class TicketStore {
 
   get user() {
     return this._user;
+  }
+  
+  get tickets() {
+    return this._tickets;
   }
 
   get attractions() {
@@ -35,6 +40,9 @@ export default class TicketStore {
   // Метод для обновления списка аттракционов
   setAttractions(attractions) {
     this._attractions = attractions;
+  }
+  setTickets(tickets) {
+    this._tickets = tickets;
   }
 
   async addBalance(amount) {
@@ -63,6 +71,14 @@ export default class TicketStore {
       this.setAttractions(data);
     } catch (error) {
       console.error('Ошибка получения аттракционов:', error);
+    }
+  }
+  async fetchTickets() {
+    try {
+      const data = await ticketAPI.getTickets(); 
+      this.setTickets(data);
+    } catch (error) {
+      console.error('Ошибка получения билетов:', error);
     }
   }
 

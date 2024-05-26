@@ -1,20 +1,23 @@
 import React from 'react';
-import { Card, Button, Form, Input } from 'antd';
-import { Row, Col } from 'antd'; // Импортируем Row и Col для компоновки
-import { observer } from 'mobx-react-lite'; // Импортируем observer
-import { useContext } from 'react'; // Импортируем useContext
-import { Context } from '../index'; // Импортируем Context
+import { Card, Button, Form } from 'antd';
+import {  Col } from 'antd'; 
+import { observer } from 'mobx-react-lite'; 
+import { useContext } from 'react'; 
+import { Context } from '../index'; 
+
 
 const AttractionCard = observer(({ attraction }) => {
   const { ticket } = useContext(Context); // Получаем ticketStore из Context
 
   const handleBuyClick = async () => {
     try {
-      await ticket.buyTicket(attraction.name); // Вызываем buyTicket с названием из title
-      // После успешной покупки можно обновить состояние или выполнить другие действия
+      console.log(localStorage.getItem('token'))
+      console.log('AttractionCard: Отправка запроса на покупку билета...');
+      console.log('AttractionCard: name_attraction:', attraction.name);
+      await ticket.buyTicket(attraction.name);
+      console.log('AttractionCard: Билет куплен успешно!');
     } catch (error) {
       console.error('Ошибка при покупке билета:', error);
-      // Обработайте ошибку, например, выведите сообщение пользователю
     }
   };
 
