@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
-import { Space, Table, Tag, Row, Col, ConfigProvider, Button } from 'antd';
+import { Space, Table, Tag, Row, Col, ConfigProvider, Button, Input } from 'antd';
 import { TinyColor } from '@ctrl/tinycolor';
+import styled from 'styled-components';
 
 const colors1 = ['#6253E1', '#04BEFE'];
 const getHoverColors = (colors) =>
@@ -12,13 +13,20 @@ const getActiveColors = (colors) =>
 
 const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
-  const { ticket } = useContext(Context)
-
+  const { ticket } = useContext(Context);
   useEffect(() => {
     // Получить баланс пользователя при монтировании компонента
     console.log(ticket.balance); // Выводим баланс в консоль
     ticket.fetchTickets(); // Загружаем билеты пользователя
-  }, [ticket.balance, ticket]); // Добавляем зависимости
+  }, [ticket, ticket.balance]); // Добавляем зависимости
+
+  const handleUseTicket = async (record) => {
+    try {
+      await ticket.useTicket(record.name);
+    } catch (error) {
+      console.error('Ошибка при использовании билета:', error);
+    }
+  };
 
   const handleAddBalance = async () => {
     try {
@@ -26,7 +34,6 @@ const Profile = observer(() => {
       setAmount(''); // Очищаем поле ввода
     } catch (error) {
       console.error(error);
-      // Обработать ошибку (например, вывести сообщение пользователю)
     }
   };
 
@@ -52,35 +59,34 @@ const Profile = observer(() => {
     {
       title: 'Действия',
       key: 'action',
-      render: (_, record) => (
+      render: (_,record) => (
         <Space size="middle">
-          <button>Использовать</button>
-          <button>Удалить</button>
+          <Button type="primary" onClick={()=>handleUseTicket(record)}>Использовать</Button>
+
         </Space>
       ),
     },
   ];
 
   return (
-    <div>
-      <Row>
+    <Wrapper>
+      <Row gutter={24}>
         <Col flex="auto">
           {/* Вывод списка билетов */}
           <h3>Ваши билеты:</h3>
           <Table columns={columns} dataSource={ticket.tickets} />
         </Col>
-        <Col flex="200px">
+        <Col span={6}>
           {/* Отобразить баланс пользователя */}
-          <div style={{ textAlign: 'right', marginBottom: '16px' }}>
+          <BalanceWrapper>
             <h3>Ваш баланс:</h3>
-            <p>{ticket.balance}</p>
+            <Balance>{ticket.balance}</Balance>
 
             {/* Форма для пополнения баланса */}
-            <div>
-              <label htmlFor="amount">Сумма пополнения:</label>
-              <input
+            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+              <Input
                 type="number"
-                id="amount"
+                placeholder="Сумма пополнения"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
@@ -100,12 +106,31 @@ const Profile = observer(() => {
                   Пополнить баланс
                 </Button>
               </ConfigProvider>
-            </div>
-          </div>
+            </Space>
+          </BalanceWrapper>
         </Col>
       </Row>
-    </div>
+    </Wrapper>
   );
 });
 
 export default Profile;
+
+const Wrapper = styled.div`
+  padding: 24px;
+`;
+
+const BalanceWrapper = styled.div`
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Balance = styled.h2`
+  margin-top: 8px;
+  font-size: 24px;
+  font-weight: bold;
+`;

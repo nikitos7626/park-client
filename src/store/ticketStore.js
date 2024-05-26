@@ -45,6 +45,16 @@ export default class TicketStore {
     this._tickets = tickets;
   }
 
+  async useTicket(name) {
+    try {
+      await ticketAPI.useTicket(name);
+      await this.fetchTickets();
+    } catch (error) {
+      console.error('Ошибка при использовании билета:', error);
+      throw error;
+    }
+  }
+  
   async addBalance(amount) {
     try {
       const response = await ticketAPI.addbalance(amount);

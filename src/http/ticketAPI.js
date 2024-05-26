@@ -23,9 +23,10 @@ const ticketAPI = {
   getTickets: async()=>{
     const {data} = await $authHost.get('api/ticket/getTickets')
     return data;
+  },
+  useTicket: async (name) => {
+    const { data } = await $authHost.post('api/ticket/useTicket', { name });
+    return data;
   }
-  
-  
 };
-
-export default ticketAPI; // Экспортируем объект
+export default ticketAPI; 
