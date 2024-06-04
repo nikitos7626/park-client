@@ -52,7 +52,7 @@ const NavBar = observer(() => {
             {user.user.role === 'ADMIN' && (
               <li className="nav-menu-item">
                 <NavLink to={Admin_Route} className="nav-menu-link">
-                  Админ-панель
+                  Добавить аттракцион
                 </NavLink>
               </li>
             )}

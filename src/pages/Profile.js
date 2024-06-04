@@ -23,19 +23,22 @@ const Profile = observer(() => {
   const handleUseTicket = async (record) => {
     try {
       const response = await ticket.useTicket(record.name);
+    
       if (response.status === 200) {
-        message.success('Билет успешно использован!'); // Уведомление об успехе
+        // Обработка успешного ответа
+        message.success('Билет успешно использован!');
         ticket.fetchTickets(); // Обновляем список билетов
       } else {
-        if (response.status === 403) {
-          message.error('Билет уже использован'); // Уведомление о том, что билет уже использован
+        // Обработка ошибок
+        if (response.status === 404) {
+          message.error('Билет уже использован');
         } else {
-          message.error('Ошибка при использовании билета'); // Общее уведомление об ошибке
+          message.error('Ошибка при использовании билета');
         }
       }
     } catch (error) {
       console.error('Ошибка при использовании билета:', error);
-      message.error('Ошибка при использовании билета'); 
+      message.error('Билет уже использован');
     }
   };
 
