@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import { registration, login } from '../http/userAPI';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Attractions_route, login_route } from '../utils/consts';
@@ -37,6 +37,7 @@ const Authform = () => {
 
     } catch (error) {
       // Обработка ошибок
+      message.error(error.response.data.message); // Выводим сообщение об ошибке из ответа сервера
       console.error(error);
     }
   };

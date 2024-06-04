@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
-import { Space, Table, Tag, Row, Col, ConfigProvider, Button, Input } from 'antd';
+import { Space, Table, Tag, Row, Col, ConfigProvider, Button, Input,message } from 'antd';
 import { TinyColor } from '@ctrl/tinycolor';
 import styled from 'styled-components';
 
@@ -22,11 +22,23 @@ const Profile = observer(() => {
 
   const handleUseTicket = async (record) => {
     try {
-      await ticket.useTicket(record.name);
+      const response = await ticket.useTicket(record.name);
+      if (response.status === 200) {
+        message.success('Билет успешно использован!'); // Уведомление об успехе
+        ticket.fetchTickets(); // Обновляем список билетов
+      } else {
+        if (response.status === 403) {
+          message.error('Билет уже использован'); // Уведомление о том, что билет уже использован
+        } else {
+          message.error('Ошибка при использовании билета'); // Общее уведомление об ошибке
+        }
+      }
     } catch (error) {
       console.error('Ошибка при использовании билета:', error);
+      message.error('Ошибка при использовании билета'); 
     }
   };
+
 
   const handleAddBalance = async () => {
     try {

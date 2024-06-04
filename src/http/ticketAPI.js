@@ -27,6 +27,11 @@ const ticketAPI = {
   useTicket: async (name) => {
     const { data } = await $authHost.post('api/ticket/useTicket', { name });
     return data;
-  }
+  },
+  
+  addTicket: async (name, price, working_hours) => {
+    const { data } = await $authHost.post('api/attraction/create', { name, price, working_hours });
+    return data;
+  }  
 };
 export default ticketAPI; 

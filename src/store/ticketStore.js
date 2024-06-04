@@ -91,6 +91,15 @@ export default class TicketStore {
       console.error('Ошибка получения билетов:', error);
     }
   }
+  async createAttraction(name, price, working_hours) {
+    try {
+      const data = await ticketAPI.addTicket(name, price, working_hours);
+      this.setAttractions([this.attractions, data.attraction]);
+    } catch (error) {
+      console.error('Ошибка при создании аттракциона:', error);
+      throw error;
+    }
+  }
 
   logout() {
     this._user = {};
