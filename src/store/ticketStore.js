@@ -67,11 +67,19 @@ export default class TicketStore {
   async buyTicket(name_attraction) {
     try {
       await ticketAPI.buyTicket(name_attraction); 
-      // Получите обновленный баланс после покупки билета
       const balanceResponse = await ticketAPI.getBalance(); 
       this.setBalance(balanceResponse.balance); 
     } catch (error) {
       console.error('Ошибка при покупке билета:', error);
+    }
+  }
+
+  async fetchBalance() {
+    try {
+      const response = await ticketAPI.getBalance(); 
+      this.setBalance(response.balance); 
+    } catch (error) {
+      console.error('Ошибка получения баланса:', error);
     }
   }
 

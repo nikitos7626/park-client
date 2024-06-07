@@ -15,15 +15,15 @@ const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
   const { ticket } = useContext(Context);
   useEffect(() => {
-    // Получить баланс пользователя при монтировании компонента
     console.log(ticket.balance); // Выводим баланс в консоль
     ticket.fetchTickets(); // Загружаем билеты пользователя
-  }, [ticket, ticket.balance]); // Добавляем зависимости
+    ticket.fetchBalance();
+  }, [ticket, ticket.balance]); 
 
   const handleUseTicket = async (record) => {
     try {
       const response = await ticket.useTicket(record.name);
-    
+  
       if (response.status === 200) {
         // Обработка успешного ответа
         message.success('Билет успешно использован!');
@@ -37,18 +37,30 @@ const Profile = observer(() => {
         }
       }
     } catch (error) {
-      console.error('Ошибка при использовании билета:', error);
-      message.error('Билет уже использован');
+      if (error.response && error.response.data && error.response.data.message) {
+        message.error(error.response.data.message);
+      } else {
+        message.success('Билет успешно использован');
+      }
     }
   };
 
 
   const handleAddBalance = async () => {
     try {
-      await ticket.addBalance(amount); // Вызываем метод addBalance
-      setAmount(''); // Очищаем поле ввода
+      const response = await ticket.addBalance(amount); // Вызываем метод addBalance
+
+      if (response.status === 200) {
+        // Обработка успешного ответа
+        message.success('Баланс успешно пополнен!');
+        setAmount(''); // Очищаем поле ввода
+        ticket.fetchBalance();
+      } else {
+        message.error('Ошибка при пополнении баланса');
+      }
     } catch (error) {
       console.error(error);
+      message.error('Ошибка при пополнении баланса');
     }
   };
 

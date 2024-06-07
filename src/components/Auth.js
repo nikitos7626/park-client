@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { registration, login } from '../http/userAPI';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Attractions_route, login_route } from '../utils/consts';
+import { useNavigate } from 'react-router-dom';
+import { Attractions_route} from '../utils/consts';
 import { Context } from '../index';
 
 const Authform = () => {
-  const location = useLocation();
   const { user } = useContext(Context);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
