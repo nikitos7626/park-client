@@ -10,6 +10,7 @@ const Authform = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // Добавлено состояние для подтверждения пароля
   const [mode, setMode] = useState('login');
 
   const click = async () => {
@@ -20,6 +21,11 @@ const Authform = () => {
         console.log("login")
       } else if (mode === 'register') {
         console.log("register")
+        // Проверка паролей при регистрации
+        if (password !== confirmPassword) {
+          message.error('Пароли не совпадают!');
+          return;
+        }
         data = await registration(email, password);
       } else {
         // Обработка некорректного режима (например, вывести ошибку)
@@ -108,7 +114,7 @@ const Authform = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} /> {/* Добавлено поле для ввода подтверждения пароля */}
           </Form.Item>
         )}
 

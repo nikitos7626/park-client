@@ -31,3 +31,60 @@
   .nav-menu-link:hover {
     color: #cccccc;
   }
+  
+  .main-menu {
+    background-color: #201759; /* Темно-синий фон */
+    display: flex;
+    flex-direction: column;
+    justify-content:end; /* Выравнивание по центру по вертикали */
+    align-items: center;
+    text-align: center;
+    font-family: 'Merriweather', serif; /* Шрифт Merriweather */
+    color: #01DCF7; /* Ярко-голубой цвет текста */
+    min-height: 100vh; /* Занимает всю высоту экрана */
+  }
+  
+  .menu-content {
+    margin-bottom: 50px; /* Отступ снизу для карты */
+  }
+  
+  .map-container {
+    width: 100%; /* Занимает всю ширину */
+    height: 300px; /* Высота карты */
+    flex-shrink: 0; /* Не сжимается при уменьшении высоты */
+  }
+  
+  @media (max-width: 768px) { /* Адаптация для мобильных устройств */
+    .map-container {
+      width: 100%; /* Занимает всю ширину */
+      height: 200px; /* Уменьшаем высоту карты */
+    }
+  }
+  
+  
+  .animated-title {
+    animation: titleAnimation 1s ease-in-out;
+  }
+  
+  .animated-text {
+    animation: textAnimation 1.5s ease-in-out;
+  }
+  
+  .animated-list {
+    animation: listAnimation 2s ease-in-out;
+  }
+  
+  @keyframes titleAnimation {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  
+  @keyframes textAnimation {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  
+  @keyframes listAnimation {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
