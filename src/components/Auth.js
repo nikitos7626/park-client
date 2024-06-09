@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { registration, login } from '../http/userAPI';
 import { useNavigate } from 'react-router-dom';
-import { Attractions_route} from '../utils/consts';
+import { Attractions_route } from '../utils/consts';
 import { Context } from '../index';
 
 const Authform = () => {
@@ -10,7 +10,7 @@ const Authform = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // Добавлено состояние для подтверждения пароля
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [mode, setMode] = useState('login');
 
   const click = async () => {
@@ -26,6 +26,11 @@ const Authform = () => {
           message.error('Пароли не совпадают!');
           return;
         }
+        // Проверка наличия символа "@" в почте
+        if (!email.includes('@')) {
+          message.error('Некорректный адрес электронной почты!');
+          return;
+        }
         data = await registration(email, password);
       } else {
         // Обработка некорректного режима (например, вывести ошибку)
@@ -34,15 +39,13 @@ const Authform = () => {
       }
 
 
-      user.setUser(data); // Передаем данные пользователя из ответа сервера
+      user.setUser(data); 
 
-      // Устанавливаем состояние авторизации
-      user.setIsAuth(true); // Добавьте метод setIsAuth в UserStore
+      user.setIsAuth(true); 
       navigate(Attractions_route)
 
     } catch (error) {
-      // Обработка ошибок
-      message.error(error.response.data.message); // Выводим сообщение об ошибке из ответа сервера
+      message.error(error.response.data.message);
       console.error(error);
     }
   };
@@ -83,7 +86,11 @@ const Authform = () => {
           rules={[
             {
               required: true,
-              message: 'Please input your email!',
+              message: 'Введите почту!',
+            },
+            {
+              type: 'email',
+              message: 'Пожалуйста введите корректную почту!',
             },
           ]}
         >
@@ -96,7 +103,7 @@ const Authform = () => {
           rules={[
             {
               required: true,
-              message: 'Please input your password!',
+              message: 'Введите пароль!',
             },
           ]}
         >
@@ -110,11 +117,11 @@ const Authform = () => {
             rules={[
               {
                 required: true,
-                message: 'Please confirm your password!',
+                message: 'Подтвердите свой пароль!',
               },
             ]}
           >
-            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} /> {/* Добавлено поле для ввода подтверждения пароля */}
+            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} /> 
           </Form.Item>
         )}
 
