@@ -38,10 +38,15 @@ const ticketAPI = {
     const {data} = await $authHost.get('api/attendance/overall')
     return data;
   },
-  
+
   getWeeklyAttendanceByDay:async()=>{
     const {data} = await $authHost.get('api/attendance/weekly-attendance-by-day')
     return data;
-  }
+  },
+  cancelTicket:async(name)=>
+    {
+      const {data} = await $authHost.post('api/ticket/cancelTicket',{name})
+      return data;
+    }
 };
 export default ticketAPI; 

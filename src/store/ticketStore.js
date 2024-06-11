@@ -121,6 +121,15 @@ export default class TicketStore {
       return null; // Or handle the error appropriately
     }
   }
+  async cancelTicket(name) {
+    try {
+      await ticketAPI.cancelTicket(name); // Вызов метода cancelTicket из ticketAPI
+      await this.fetchTickets(); // Обновление списка билетов после отмены
+    } catch (error) {
+      console.error('Ошибка при отмене билета:', error);
+      throw error; 
+    }
+  }
 
   async fetchWeeklyAttendanceByDay() {
     try {

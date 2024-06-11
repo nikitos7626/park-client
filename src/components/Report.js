@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Card, Statistic, Select, DatePicker, Row, Col } from 'antd';
-import moment from 'moment';
+import { Card, Statistic, Select, Row, Col } from 'antd';
 import { Context } from "../index";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { PieChart, Pie, Cell } from 'recharts';
 
-const { Option } = Select;
-
 const Report = () => {
-  const { user, ticket } = useContext(Context);
+  const {  ticket } = useContext(Context);
   const [overallAttendance, setOverallAttendance] = useState(null);
   const [weeklyAttendanceByDay, setWeeklyAttendanceByDay] = useState([]);
 

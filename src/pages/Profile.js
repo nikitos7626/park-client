@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
-import { Space, Table, Tag, Row, Col, ConfigProvider, Button, Input,message } from 'antd';
+import { Space, Table, Tag, Row, Col, ConfigProvider, Button, Input, message } from 'antd';
 import { TinyColor } from '@ctrl/tinycolor';
 import styled from 'styled-components';
 
@@ -13,17 +13,34 @@ const getActiveColors = (colors) =>
 
 const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
-  const { ticket } = useContext(Context);
+  const { ticket,user} = useContext(Context);
+
   useEffect(() => {
     console.log(ticket.balance); // Выводим баланс в консоль
     ticket.fetchTickets(); // Загружаем билеты пользователя
     ticket.fetchBalance();
-  }, [ticket, ticket.balance]); 
+  }, [ticket, ticket.balance]);
+
+  const handleCancelTicket = async (record) => {
+    try {
+      console.log(ticket.price);
+      console.log(user.balance)
+      await ticket.cancelTicket(record.name); // Вызываем метод cancelTicket
+      message.success('Билет успешно отменен!');
+      ticket.fetchTickets(); // Обновляем список билетов
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        message.error(error.response.data.message);
+      } else {
+        message.error('Ошибка при отмене билета');
+      }
+    }
+  };
 
   const handleUseTicket = async (record) => {
     try {
       const response = await ticket.useTicket(record.name);
-  
+
       if (response.status === 200) {
         // Обработка успешного ответа
         message.success('Билет успешно использован!');
@@ -44,7 +61,6 @@ const Profile = observer(() => {
       }
     }
   };
-
 
   const handleAddBalance = async () => {
     try {
@@ -86,10 +102,14 @@ const Profile = observer(() => {
     {
       title: 'Действия',
       key: 'action',
-      render: (_,record) => (
+      render: (_, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={()=>handleUseTicket(record)}>Использовать</Button>
-
+          <Button type="primary" onClick={() => handleUseTicket(record)}>
+            Использовать
+          </Button>
+          <Button type="danger" onClick={() => handleCancelTicket(record)}>
+            Отменить
+          </Button>
         </Space>
       ),
     },
