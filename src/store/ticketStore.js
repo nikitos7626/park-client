@@ -8,13 +8,8 @@ export default class TicketStore {
     this._attractions = []; 
     this._tickets = [];
     this.userStore = new UserStore();
-    this._totalVisitors = 0; 
-    this._averageVisitors = 0;
-    this._visitorsByPeriod = [];
-    this._topAttractions = []; 
-    this._bottomAttractions = []; 
-    this._totalRevenue = 0;
-    this._revenueByAttraction = [];
+    this._overallAttendance = null; 
+    this._weeklyAttendanceByDay = [];
     makeAutoObservable(this);
   }
 
@@ -116,100 +111,31 @@ export default class TicketStore {
       throw error;
     }
   }
-   //////////////ОТЧЁТНОСТЬ/////////////////////////////////////////////////////////////
-
-  get totalVisitors() {
-    return this._totalVisitors;
-  }
-
-  get averageVisitors() {
-    return this._averageVisitors;
-  }
-
-  get visitorsByPeriod() {
-    return this._visitorsByPeriod;
-  }
-
-  get topAttractions() {
-    return this._topAttractions;
-  }
-
-  get bottomAttractions() {
-    return this._bottomAttractions;
-  }
-
-  get totalRevenue() {
-    return this._totalRevenue;
-  }
-
-  get revenueByAttraction() {
-    return this._revenueByAttraction;
-  }
-
-  async fetchTotalVisitors() {
+  async fetchOverallAttendance() {
     try {
-      const data = await ticketAPI.getTotalVisitorsByAttraction();
-      this._totalVisitors = data;
+      const { data } = await ticketAPI.getOverallAttendance();
+      this._overallAttendance = data;
+      return data; // Return the data
     } catch (error) {
-      console.error('Ошибка получения общего количества посетителей:', error);
+      console.error('Ошибка получения общей посещаемости:', error);
+      return null; // Or handle the error appropriately
     }
   }
 
-  async fetchAverageVisitors(period) {
+  async fetchWeeklyAttendanceByDay() {
     try {
-      const data = await ticketAPI.getAverageVisitorsByAttraction(period);
-      this._averageVisitors = data;
+      const { data } = await ticketAPI.getWeeklyAttendanceByDay();
+      this._weeklyAttendanceByDay = data;
+      return data; // Return the data
     } catch (error) {
-      console.error('Ошибка получения среднего количества посетителей:', error);
+      console.error('Ошибка получения еженедельной посещаемости по дням:', error);
+      return null; // Or handle the error appropriately
     }
   }
 
-  async fetchVisitorsByPeriod(period) {
-    try {
-      const data = await ticketAPI.getVisitorsByPeriod(period);
-      this._visitorsByPeriod = data;
-    } catch (error) {
-      console.error('Ошибка получения количества посетителей за период:', error);
-    }
-  }
-
-  async fetchTopAttractions(period) {
-    try {
-      const data = await ticketAPI.getTopAttractions(period);
-      this._topAttractions = data;
-    } catch (error) {
-      console.error('Ошибка получения самых популярных аттракционов:', error);
-    }
-  }
-
-  async fetchBottomAttractions(period) {
-    try {
-      const data = await ticketAPI.getBottomAttractions(period);
-      this._bottomAttractions = data;
-    } catch (error) {
-      console.error('Ошибка получения самых непопулярных аттракционов:', error);
-    }
-  }
-
-  async fetchTotalRevenue(period) {
-    try {
-      const data = await ticketAPI.getTotalRevenue(period);
-      this._totalRevenue = data;
-    } catch (error) {
-      console.error('Ошибка получения общего дохода:', error);
-    }
-  }
-
-  async fetchRevenueByAttraction(period) {
-    try {
-      const data = await ticketAPI.ggetRevenueByAttraction(period);
-      this._revenueByAttraction = data;
-    } catch (error) {
-      console.error('Ошибка получения дохода по аттракционам:', error);
-    }
-  }
   logout() {
     this._user = {};
     this._balance = 0;
   }
+  
 }

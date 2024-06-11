@@ -1,68 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Statistic, Select, DatePicker } from 'antd';
+import React, { useState, useEffect, useContext } from 'react';
+import { Card, Statistic, Select, DatePicker, Row, Col } from 'antd';
 import moment from 'moment';
+import { Context } from "../index";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 
 const { Option } = Select;
 
 const Report = () => {
-  const [period, setPeriod] = useState('daily');
-  const [selectedDate, setSelectedDate] = useState(moment());
-  const [totalRevenue, setTotalRevenue] = useState(0);
-  const [averageVisitors, setAverageVisitors] = useState(0);
-  // ... (Add state variables for other report data)
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, ticket } = useContext(Context);
+  const [overallAttendance, setOverallAttendance] = useState(null);
+  const [weeklyAttendanceByDay, setWeeklyAttendanceByDay] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setIsLoading(true);
+      const overallAttendanceData = await ticket.fetchOverallAttendance();
+      setOverallAttendance(overallAttendanceData);
+      console.log(overallAttendanceData)
 
-        // Fetch total revenue
-        const totalRevenueResponse = await fetch(`/api/attendance/total-revenue`);
-        const totalRevenueData = await totalRevenueResponse.json();
-        setTotalRevenue(totalRevenueData.totalRevenue);
-
-        // Fetch average visitors
-        const averageVisitorsResponse = await fetch(`/api/attendance/average-visitors`);
-        const averageVisitorsData = await averageVisitorsResponse.json();
-        setAverageVisitors(averageVisitorsData.averageVisitors);
-
-        // ... (Fetch other report data)
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Handle error
-      }
+      const weeklyAttendanceByDayData = await ticket.fetchWeeklyAttendanceByDay();
+      setWeeklyAttendanceByDay(weeklyAttendanceByDayData);
+      console.log(weeklyAttendanceByDayData)
     };
-
     fetchData();
-  }, [period, selectedDate]);
+  }, [ticket]);
 
-  // ... (Rest of your component code, using the fetched data)
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+  const data = [
+    { name: 'Продано', value: overallAttendance || 0 },
+    { name: 'Не продано', value: 0 }
+  ]; // Define the data array here
 
   return (
     <div>
-      <h1>Отчеты</h1>
-      {/* ... (Your UI elements, including the DatePicker and Select) */}
-
-      {isLoading ? (
-        <p>Загрузка...</p>
-      ) : (
-        <div>
-          <Card title="Продажи">
-            <Statistic title="Общий доход" value={totalRevenue} precision={2} />
-            {/* ... other statistics */}
-          </Card>
-
-          <Card title="Посетители">
-            <Statistic title="Среднее количество посетителей" value={averageVisitors} precision={2} />
-            {/* ... other statistics */}
-          </Card>
-
-          {/* ... (Other Card components for your reports) */}
-        </div>
-      )}
+      <Card title="Отчет о посещаемости">
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Card title="Общая посещаемость">
+              <Statistic
+                title="Количество"
+                value={overallAttendance || 'Нет данных'}
+                valueStyle={{ fontSize: '24px', fontWeight: 'bold', color: '#3f51b5' }}
+              />
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={data} // Pass the data array as a prop
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                >
+                  {
+                    data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))
+                  }
+                </Pie>
+              </PieChart>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card title="Еженедельная посещаемость по дням">
+              <BarChart width={500} height={300} data={weeklyAttendanceByDay}>
+                <XAxis dataKey="day" />
+                <YAxis />
+                <CartesianGrid stroke="#f5f5f5" />
+                <Tooltip
+                  formatter={(value, name, props) => {
+                    return `${name}: ${value} посещений`; // Форматируем подсказку
+                  }}
+                />
+                <Legend />
+                <Bar dataKey="count" fill="#8884d8"
+                  label={({ value }) => value}
+                  labelFormatter={(value) => `Количество: ${value}`} // Изменяем текст метки
+                />
+              </BarChart>
+            </Card>
+          </Col>
+        </Row>
+      </Card>
     </div>
   );
 };
