@@ -114,11 +114,10 @@ export default class TicketStore {
   async fetchOverallAttendance() {
     try {
       const { data } = await ticketAPI.getOverallAttendance();
-      this._overallAttendance = data;
-      return data; // Return the data
+      return { overallAttendance: data, pieChartData: data }; 
     } catch (error) {
-      console.error('Ошибка получения общей посещаемости:', error);
-      return null; // Or handle the error appropriately
+      console.error('Ошибка получения общей посещаемости:', error); 
+      throw new Error('Ошибка получения общей посещаемости'); 
     }
   }
   async cancelTicket(name) {
