@@ -11,10 +11,9 @@ const getHoverColors = (colors) =>
 const getActiveColors = (colors) =>
   colors.map((color) => new TinyColor(color).darken(5).toString());
 
-
 const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
-  const { ticket,user} = useContext(Context);
+  const { ticket, user } = useContext(Context);
 
   useEffect(() => {
     console.log(ticket.balance); // Выводим баланс в консоль
@@ -25,7 +24,7 @@ const Profile = observer(() => {
   const handleCancelTicket = async (record) => {
     try {
       console.log(ticket.price);
-      console.log(user.balance)
+      console.log(user.balance);
       await ticket.cancelTicket(record.name); // Вызываем метод cancelTicket
       message.success('Билет успешно отменен!');
       ticket.fetchTickets(); // Обновляем список билетов
@@ -103,16 +102,23 @@ const Profile = observer(() => {
     {
       title: 'Действия',
       key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <Button type="primary" onClick={() => handleUseTicket(record)}>
-            Использовать
-          </Button>
-          <Button type="danger" onClick={() => handleCancelTicket(record)}>
-            Отменить
-          </Button>
-        </Space>
-      ),
+      render: (_, record) => {
+        if (record.status === 'USED' || record.status === 'CANCELED') {
+          // Если билет использован или отменен, не показываем кнопки
+          return null;
+        } else {
+          return (
+            <Space size="middle">
+              <Button type="primary" onClick={() => handleUseTicket(record)}>
+                Использовать
+              </Button>
+              <Button type="danger" onClick={() => handleCancelTicket(record)}>
+                Отменить
+              </Button>
+            </Space>
+          );
+        }
+      },
     },
   ];
 

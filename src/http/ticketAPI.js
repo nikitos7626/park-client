@@ -1,5 +1,4 @@
 import { $authHost, $host} from "./index";
-
 const ticketAPI = {
   addbalance: async (balance) => {
     const { data } = await $authHost.post('api/user/addmoney', { balance }); 
@@ -20,9 +19,18 @@ const ticketAPI = {
     const { data } = await $host.get('api/attraction/getAllAttractions');
     return data;
   },
-  getTickets: async()=>{
-    const {data} = await $authHost.get('api/ticket/getTickets')
-    return data;
+  getTickets: async (status = null) => {
+    try {
+      let url = 'api/ticket/getTickets';
+      if (status) {
+        url += `?status=${status}`;
+      }
+      const { data } = await $authHost.get(url);
+      return data;
+    } catch (error) {
+      console.error('Ошибка при получении билетов:', error);
+      throw error;
+    }
   },
   useTicket: async (name) => {
     const { data } = await $authHost.post('api/ticket/useTicket', { name });

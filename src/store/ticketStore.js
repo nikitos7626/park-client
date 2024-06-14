@@ -94,9 +94,9 @@ export default class TicketStore {
       console.error('Ошибка получения аттракционов:', error);
     }
   }
-  async fetchTickets() {
+  async fetchTickets(status = null) {
     try {
-      const data = await ticketAPI.getTickets(); 
+      const data = await ticketAPI.getTickets(status); 
       this.setTickets(data);
     } catch (error) {
       console.error('Ошибка получения билетов:', error);
