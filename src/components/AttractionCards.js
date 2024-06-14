@@ -9,20 +9,15 @@ const AttractionCard = observer(({ attraction }) => {
 
   const handleBuyClick = async () => {
     try {
-      const response = await ticket.buyTicket(attraction.name);
-
-      if (response.status === 200) {
-        message.success('Билет успешно куплен!');
-        ticket.fetchAttractions(); 
-      } else {
-        message.error(response.data.message); // Используем сообщение из ответа
-      }
+      await ticket.buyTicket(attraction.name);
+      message.success('Билет успешно куплен!');
+      ticket.fetchAttractions();
     } catch (error) {
+      let errorMessage = 'Произошла ошибка при покупке билета.';
       if (error.response && error.response.data && error.response.data.message) {
-        message.error(error.response.data.message);
-      } else {
-        message.error('Ошибка при покупке билета');
+        errorMessage = error.response.data.message;
       }
+      message.error(errorMessage);
     }
   };
 

@@ -11,6 +11,7 @@ const getHoverColors = (colors) =>
 const getActiveColors = (colors) =>
   colors.map((color) => new TinyColor(color).darken(5).toString());
 
+
 const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
   const { ticket,user} = useContext(Context);

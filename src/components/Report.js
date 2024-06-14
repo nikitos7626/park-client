@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Card, Statistic, Select, Row, Col } from 'antd';
+import { Card, Statistic, Row, Col } from 'antd';
 import { Context } from "../index";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { PieChart, Pie, Cell } from 'recharts';
@@ -18,7 +18,7 @@ const Report = () => {
       try {
         const overallAttendanceData = await ticket.fetchOverallAttendance();
         setOverallAttendance(overallAttendanceData.overallAttendance); 
-        setPieChartData(overallAttendanceData.pieChartData); // Изменено на pieChartData
+        setPieChartData(overallAttendanceData.pieChartData); 
 
         const weeklyAttendanceByDayData = await ticket.fetchWeeklyAttendanceByDay();
         setWeeklyAttendanceByDay(weeklyAttendanceByDayData);
@@ -31,7 +31,7 @@ const Report = () => {
     fetchData();
   }, [ticket]);
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ['#ff0000', '#00C49F', '#00bfff', '#FF8042']; // ACTIVE, USED, CANCELED
 
   return (
     <div>
@@ -43,13 +43,9 @@ const Report = () => {
               <div>Загрузка...</div>
             ) : (
               <>
-                <Statistic
-                  title="Количество"
-                  value={overallAttendance?.toString() || 'Нет данных'} 
-                  valueStyle={{ fontSize: '24px', fontWeight: 'bold', color: '#3f51b5' }}
-                />
-                {pieChartData || pieChartData !== null ? (
-                  <PieChart width={300} height={300} data={pieChartData}> {/* Добавлено data={pieChartData} */}
+                
+                {pieChartData.length > 0 ? (
+                  <PieChart width={300} height={300} data={pieChartData}>
                     <Pie
                       data={pieChartData} 
                       dataKey="value"
@@ -60,10 +56,15 @@ const Report = () => {
                       fill="#8884d8"
                       label
                     >
-                      {pieChartData?.map((entry, index) => (
+                      {pieChartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
+                    <Legend>
+                      <span style={{ color: COLORS[0] }}>Активные</span>
+                      <span style={{ color: COLORS[1] }}>Использованные</span>
+                      <span style={{ color: COLORS[2] }}>Отмененные</span>
+                    </Legend>
                   </PieChart>
                 ) : (
                   <div>Загрузка данных для диаграммы...</div> 
