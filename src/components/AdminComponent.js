@@ -79,22 +79,6 @@ const AdminComponent = () => {
                 </Button>
               </Form.Item>
             </Form>
-            {/* Модальное окно для отчёта (отображается только при выборе соответствующего пункта меню) */}
-            <Modal
-              title="Отчёт"
-              visible={isReportModalVisible}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="back" onClick={handleCancel}>
-                  Закрыть
-                </Button>,
-                <Button key="submit" type="primary" onClick={handleReport}>
-                  Сгенерировать
-                </Button>,
-              ]}
-            >
-              <p>Здесь будет отображаться отчёт.</p>
-            </Modal>
           </Col>
         </Row>
       </Content>

@@ -41,6 +41,12 @@ const Authform = () => {
 
       user.setUser(data); 
 
+      // Проверка роли пользователя после входа
+      if (data.role === 'Banned') {
+        message.error('Ваш аккаунт временно заблокирован из-за нарушения правил нашего заведения. Для решения вашей проблемы просим позвонить на номер +79616926522');
+        return;
+      }
+
       user.setIsAuth(true); 
       navigate(Attractions_route)
 

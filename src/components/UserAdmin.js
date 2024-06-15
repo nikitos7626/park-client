@@ -1,53 +1,95 @@
-import React, { useState } from 'react';
-import { Table, Button, Modal, Form, Input, message } from 'antd';
+import React, { useState, useContext, useEffect } from 'react';
+import { Table, Button, message, Spin, Modal } from 'antd';
+import { Context } from '../index';
 
 const UsersAdmin = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [users, setUsers] = useState([]); // Массив для хранения пользователей
+  const { user } = useContext(Context);
+  const [users, setUsers] = useState(null);
+  const [blockMessage, setBlockMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedUsers = await user.fetchUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        message.error('Ошибка при получении пользователей');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [user]);
+
+  const [isBlockModalVisible, setIsBlockModalVisible] = useState(false);
+  const [blockTargetEmail, setBlockTargetEmail] = useState(null);
+
+  const handleBlockUser = async (email) => {
+    setBlockTargetEmail(email);
+    setIsBlockModalVisible(true);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const handleConfirmBlock = async () => {
+    try {
+      await user.banUser(blockTargetEmail); // Используем banUser вместо blockUser
+      const updatedUsers = users.map((user) =>
+        user.email === blockTargetEmail ? { ...user, role: 'Banned' } : user
+      );
+      setUsers(updatedUsers);
+      setBlockMessage(`Пользователь ${blockTargetEmail} заблокирован!`);
+      setTimeout(() => setBlockMessage(null), 3000);
+      setIsBlockModalVisible(false);
+    } catch (error) {
+      console.error('Error blocking user:', error);
+      message.error('Ошибка при блокировке пользователя');
+    }
   };
 
-  const handleOk = () => {
-    // Здесь будет логика добавления нового пользователя (без бэкэнда)
-    message.success('Пользователь добавлен!');
-    setIsModalVisible(false);
+  const handleCancelBlock = () => {
+    setIsBlockModalVisible(false);
   };
 
   const columns = [
     {
-      title: 'Имя',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      align: 'center', // Центрирование содержимого столбца
+    },
+    {
+      title: 'Баланс',
+      dataIndex: 'balance',
+      key: 'balance',
+      align: 'center',
+      render: (balance) => (balance !== null ? balance : 'Не указан'),
     },
     {
       title: 'Роль',
       dataIndex: 'role',
       key: 'role',
+      align: 'center',
     },
     {
       title: 'Действия',
       key: 'action',
+      align: 'center',
       render: (text, record) => (
         <span>
-          <Button type="primary" onClick={() => {
-            // Здесь будет логика редактирования пользователя (без бэкэнда)
-            message.success('Пользователь изменен!');
-          }}>Изменить</Button>
-          <Button type="danger" onClick={() => {
-            // Здесь будет логика удаления пользователя (без бэкэнда)
-            message.success('Пользователь удален!');
-          }}>Удалить</Button>
+          {record.role === 'Banned' ? (
+            <div style={{ color: 'red' }}>Пользователь заблокирован</div>
+          ) : (
+            <Button type="primary" danger onClick={() => handleBlockUser(record.email)}>
+              Заблокировать
+            </Button>
+          )}
         </span>
       ),
     },
@@ -55,23 +97,26 @@ const UsersAdmin = () => {
 
   return (
     <div>
-      <h1>Управление пользователями</h1>
-      <Button type="primary" onClick={showModal}>
-        Добавить пользователя
-      </Button>
-      <Table dataSource={users} columns={columns} pagination={false} />
-      <Modal title="Добавить пользователя" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Form layout="vertical">
-          <Form.Item label="Имя" name="name">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Email" name="email">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Роль" name="role">
-            <Input />
-          </Form.Item>
-        </Form>
+      <h1 style={{ textAlign: 'center' }}>Управление пользователями</h1> {/* Центрирование заголовка */}
+      {isLoading && <Spin />}
+      {blockMessage && <p style={{ color: 'green' }}>{blockMessage}</p>}
+      <Table
+        dataSource={users}
+        columns={columns}
+        pagination={false}
+        style={{ textAlign: 'center' }}
+        title={() => (
+          <h2 style={{ color: 'blue' }}>Список пользователей</h2>
+        )}
+      />
+
+      <Modal
+        title="Подтверждение блокировки"
+        visible={isBlockModalVisible}
+        onOk={handleConfirmBlock}
+        onCancel={handleCancelBlock}
+      >
+        <p>Вы действительно хотите заблокировать пользователя {blockTargetEmail}?</p>
       </Modal>
     </div>
   );

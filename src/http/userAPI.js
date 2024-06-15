@@ -20,3 +20,12 @@ export const check = async() =>{
     return  jwtDecode(data.token)
    
 }
+export const getUsers =async () => {
+    const { data } = await $authHost.get('api/user/getAllUsers')
+    return data;
+}
+
+export const banUser = async (email) => {
+    const { data } = await $authHost.post('api/user/banUser', { email })
+    return data;
+}

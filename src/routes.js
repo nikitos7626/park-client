@@ -7,6 +7,7 @@ import Attractions from "./pages/Attractions"
 import Profile from "./pages/Profile"
 import Report from "./pages/Report"
 import Users from "./pages/Userslist"
+import History from "./pages/UsersAdmin"
 
 export const authRoutes= [
     {
@@ -23,7 +24,7 @@ export const authRoutes= [
     },
     {
         path:Users_route,
-        Component : Users
+        Component : History
     }
 ]
 
