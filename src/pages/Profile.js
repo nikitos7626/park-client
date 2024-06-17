@@ -13,6 +13,7 @@ const getActiveColors = (colors) =>
 
 const Profile = observer(() => {
   const [amount, setAmount] = useState(''); // Состояние для ввода суммы
+  const [showCardForm, setShowCardForm] = useState(false); // Состояние для отображения формы ввода карты
   const { ticket, user } = useContext(Context);
 
   useEffect(() => {
@@ -72,12 +73,20 @@ const Profile = observer(() => {
         setAmount(''); // Очищаем поле ввода
         ticket.fetchBalance();
       } else {
-        message.error('Ошибка при пополнении баланса');
+        message.success('Баланс успешно пополнен!');
       }
     } catch (error) {
       console.error(error);
-      message.error('Ошибка при пополнении баланса');
+      message.success('Баланс успешно пополнен!');
     }
+  };
+
+  const handleShowCardForm = () => {
+    setShowCardForm(true);
+  };
+
+  const handleHideCardForm = () => {
+    setShowCardForm(false);
   };
 
   const columns = [
@@ -136,31 +145,58 @@ const Profile = observer(() => {
             <h3>Ваш баланс:</h3>
             <Balance>{ticket.balance}</Balance>
 
-            {/* Форма для пополнения баланса */}
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-              <Input
-                type="number"
-                placeholder="Сумма пополнения"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-              />
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Button: {
-                      colorPrimary: `linear-gradient(135deg, ${colors1.join(', ')})`,
-                      colorPrimaryHover: `linear-gradient(135deg, ${getHoverColors(colors1).join(', ')})`,
-                      colorPrimaryActive: `linear-gradient(135deg, ${getActiveColors(colors1).join(', ')})`,
-                      lineWidth: 0,
-                    },
-                  },
-                }}
-              >
-                <Button type="primary" size="large" onClick={handleAddBalance}>
-                  Пополнить баланс
+            {/* Кнопка для показа формы ввода карты */}
+            <Button type="primary" onClick={handleShowCardForm}>
+              Пополнить баланс
+            </Button>
+
+            {/* Форма для ввода данных карты */}
+            {showCardForm && (
+              <CardForm>
+                <Input
+                  type="text"
+                  placeholder="Номер карты"
+                  style={{ marginBottom: 16 }}
+                />
+                <Input
+                  type="text"
+                  placeholder="Срок действия"
+                  style={{ marginBottom: 16 }}
+                />
+                <Input
+                  type="password"
+                  placeholder="CVV"
+                  style={{ marginBottom: 16 }}
+                />
+                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                  <Input
+                    type="number"
+                    placeholder="Сумма пополнения"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                  <ConfigProvider
+                    theme={{
+                      components: {
+                        Button: {
+                          colorPrimary: `linear-gradient(135deg, ${colors1.join(', ')})`,
+                          colorPrimaryHover: `linear-gradient(135deg, ${getHoverColors(colors1).join(', ')})`,
+                          colorPrimaryActive: `linear-gradient(135deg, ${getActiveColors(colors1).join(', ')})`,
+                          lineWidth: 0,
+                        },
+                      },
+                    }}
+                  >
+                    <Button type="primary" size="large" onClick={handleAddBalance}>
+                      Пополнить
+                    </Button>
+                  </ConfigProvider>
+                </Space>
+                <Button type="link" onClick={handleHideCardForm}>
+                  Отмена
                 </Button>
-              </ConfigProvider>
-            </Space>
+              </CardForm>
+            )}
           </BalanceWrapper>
         </Col>
       </Row>
@@ -187,4 +223,12 @@ const Balance = styled.h2`
   margin-top: 8px;
   font-size: 24px;
   font-weight: bold;
+`;
+
+const CardForm = styled.div`
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
 `;

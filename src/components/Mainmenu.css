@@ -33,14 +33,13 @@
   }
   
   .main-menu {
-    background-color: #201759; /* Темно-синий фон */
     display: flex;
     flex-direction: column;
     justify-content:end; /* Выравнивание по центру по вертикали */
     align-items: center;
     text-align: center;
     font-family: 'Merriweather', serif; /* Шрифт Merriweather */
-    color: #01DCF7; /* Ярко-голубой цвет текста */
+    color: black; /* Ярко-голубой цвет текста */
     min-height: 100vh; /* Занимает всю высоту экрана */
   }
   
