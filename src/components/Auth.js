@@ -1,19 +1,24 @@
-import React, { useContext, useState } from 'react';
-import { Button, Checkbox, Form, Input, message } from 'antd';
+import React, { useContext, useState, useEffect } from 'react';
+import { Button, Checkbox, Form, Input, Modal, message } from 'antd';
 import { registration, login } from '../http/userAPI';
-import { useNavigate } from 'react-router-dom';
-import { Attractions_route } from '../utils/consts';
 import { Context } from '../index';
+import { useNavigate } from 'react-router-dom'; // Импортируем useNavigate
 
 const Authform = () => {
   const { user } = useContext(Context);
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [mode, setMode] = useState('login');
+  const [visible, setVisible] = useState(false);
+  const navigate = useNavigate(); // Инициализируем useNavigate
 
-  const click = async () => {
+  // Вызываем модальное окно при монтировании компонента
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
+  const handleOk = async () => {
     let data;
     try {
       if (mode === 'login') {
@@ -38,48 +43,46 @@ const Authform = () => {
         return;
       }
 
-
-      user.setUser(data); 
-
+      user.setUser(data);
       // Проверка роли пользователя после входа
       if (data.role === 'Banned') {
         message.error('Ваш аккаунт временно заблокирован из-за нарушения правил нашего заведения. Для решения вашей проблемы просим позвонить на номер +79616926522');
         return;
       }
 
-      user.setIsAuth(true); 
-      navigate(Attractions_route)
-
+      user.setIsAuth(true);
+      setVisible(false);
+      navigate('/attractions'); // Переход на форму с аттракционами
     } catch (error) {
       message.error(error.response.data.message);
       console.error(error);
     }
   };
 
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
   const onToggle = () => {
     setMode(mode === 'login' ? 'register' : 'login');
   };
 
-
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-      }}
+    <Modal
+      title={mode === 'register' ? 'Регистрация' : 'Вход'}
+      visible={visible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      okText={mode === 'register' ? 'Зарегистрироваться' : 'Войти'}
+      cancelText="Отмена"
     >
       <Form
         name="basic"
         labelCol={{
-          span: 10,
+          span: 8,
         }}
         wrapperCol={{
           span: 16,
-        }}
-        style={{
-          maxWidth: 600,
         }}
         initialValues={{
           remember: true,
@@ -127,7 +130,7 @@ const Authform = () => {
               },
             ]}
           >
-            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} /> 
+            <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
           </Form.Item>
         )}
 
@@ -148,15 +151,12 @@ const Authform = () => {
             span: 16,
           }}
         >
-          <Button type="primary" onClick={click}>
-            {mode === 'register' ? 'Зарегистрироваться' : 'Войти'}
-          </Button>
           <Button type="link" onClick={onToggle}>
             {mode === 'register' ? 'Войти' : 'Зарегистрироваться'}
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Modal>
   );
 };
 
