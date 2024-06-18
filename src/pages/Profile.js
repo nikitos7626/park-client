@@ -4,6 +4,8 @@ import { Context } from '../index';
 import { Space, Table, Tag, Row, Col, ConfigProvider, Button, Input, message } from 'antd';
 import { TinyColor } from '@ctrl/tinycolor';
 import styled from 'styled-components';
+import './profile.css';
+
 
 const colors1 = ['#6253E1', '#04BEFE'];
 const getHoverColors = (colors) =>
@@ -231,4 +233,8 @@ const CardForm = styled.div`
   border: 1px solid #ccc;
   border-radius: 8px;
   width: 100%;
+  
+   @media (max-width: 768px) {
+    width: 100%;
+  }
 `;

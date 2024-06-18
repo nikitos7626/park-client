@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useState} from "react";
 import { Context } from "../index";
 import "./NavBar.css";
 import { NavLink } from "react-router-dom";
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const NavBar = observer(() => {
   const { user, ticket } = useContext(Context);
   const navigate = useNavigate();
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleLogout = async () => {
     try {
       await ticket.logout();
@@ -29,10 +29,20 @@ const NavBar = observer(() => {
 
   return (
     <nav className="nav-bar-container">
-      <NavLink to={MainMenu_Route} className="nav-brand-link">
-        Запредельное веселье
-      </NavLink>
-      <ul className="nav-menu">
+      <div className="nav-brand-container">
+        <NavLink to={MainMenu_Route} className="nav-brand-link">
+          Запредельное веселье
+        </NavLink>
+        <button
+          className={`burger-button ${isMenuOpen ? 'open' : ''}`}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <span className="burger-line"></span>
+          <span className="burger-line"></span>
+          <span className="burger-line"></span>
+        </button>
+      </div>
+      <ul className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
         <li className="nav-menu-item">
           <NavLink to={Attractions_route} className="nav-menu-link" onClick={handleAttractionsClick}>
             Аттракционы

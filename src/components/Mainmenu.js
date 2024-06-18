@@ -14,6 +14,7 @@ const MainMenucomponent = () => {
           <li>Сувенирные магазины</li>
           <li>И многое другое!</li>
         </ul>
+        <p className="location">г. Волгоград, парк ЦПКИО</p>
       </div>
       <div className="map-container"> 
         <YMaps>
@@ -25,6 +26,15 @@ const MainMenucomponent = () => {
             <FullscreenControl />
           </Map>
         </YMaps>
+      </div>
+      <div className="about-us">
+        <h2 className="animated-title">О нас</h2>
+        <p className="animated-text">
+          Наш парк - это место, где каждый найдет себе развлечение по душе. 
+          Мы предлагаем широкий выбор аттракционов, кафе и ресторанов, 
+          сувенирных магазинов и многое другое. 
+          Приходите к нам и проведите незабываемый день!
+        </p>
       </div>
     </div>
   );

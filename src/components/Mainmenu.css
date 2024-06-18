@@ -35,10 +35,10 @@
   .main-menu {
     display: flex;
     flex-direction: column;
-    justify-content:end; /* Выравнивание по центру по вертикали */
+    justify-content: end; /* Выравнивание по центру по вертикали */
     align-items: center;
     text-align: center;
-    font-family: 'Merriweather', serif; /* Шрифт Merriweather */
+    font-family: 'Press Start 2P', cursive; /* Шрифт для парка аттракционов */
     color: black; /* Ярко-голубой цвет текста */
     min-height: 100vh; /* Занимает всю высоту экрана */
   }
@@ -62,16 +62,25 @@
   
   
   .animated-title {
+    font-size: 48px; /* Увеличенный размер шрифта для заголовка */
     animation: titleAnimation 1s ease-in-out;
   }
   
   .animated-text {
+    font-size: 24px; /* Увеличенный размер шрифта для текста */
     animation: textAnimation 1.5s ease-in-out;
   }
   
-  .animated-list {
-    animation: listAnimation 2s ease-in-out;
-  }
+  
+.animated-list li {
+  font-size: 20px; /* Увеличенный размер шрифта для списка */
+  animation: listAnimation 2s ease-in-out;
+}
+
+.location {
+  font-size: 20px; /* Увеличенный размер шрифта для адреса */
+  margin-top: 10px; /* Отступ сверху */
+}
   
   @keyframes titleAnimation {
     0% { transform: translateY(20px); opacity: 0; }
