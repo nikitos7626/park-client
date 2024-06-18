@@ -88,7 +88,7 @@ const NavBar = observer(() => {
             </li>
             <li className="nav-menu-item">
               <NavLink to={login_route} className="nav-menu-link" onClick={handleLogout}>
-                Logout
+                Выход
               </NavLink>
             </li>
           </>
